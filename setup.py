@@ -3,7 +3,21 @@
 Использует setuptools для упаковки Flask-приложения.
 """
 
-from setuptools import setup
+from setuptools import setup, Command
+import subprocess
+
+class BuildDoc(Command):
+    description = 'Builds documentation using Sphinx'
+    user_options = []
+
+    def initialize_options(self):
+        pass
+
+    def finalize_options(self):
+        pass
+
+    def run(self):
+        subprocess.check_call(['make.bat', 'html'], cwd='docs')
 
 setup(
     name="ham_saati",
@@ -17,5 +31,9 @@ setup(
         "console_scripts": [
             "ham_saati=main:app.run"
         ]
+    },
+
+    cmdclass={
+        'build_docs': BuildDoc,
     },
 )
