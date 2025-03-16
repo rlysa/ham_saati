@@ -1,2 +1,4 @@
 ham_saati/
 __pycache__/
+build/
+ham_saati.egg-info/
