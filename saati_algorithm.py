@@ -37,3 +37,16 @@ def print_matrix(matrix):
         for j in i:
             print(round(j, 2), end=f'{" " * (5 - len(str(round(j, 2))))}')
         print()
+
+
+def oksv_and_novp(matrix):
+    oksv = []
+    for i in matrix:
+        n = 1
+        for j in i:
+            n *= j
+        oksv.append(n ** 0.2)
+    novp = [i / sum(oksv) for i in oksv]
+    print(f'''Оценки компонента собственного вектора: {[round(i, 2) for i in oksv]}
+Нормализованные оценки вектора приоритета {[round(i, 4) for i in novp]}\n''')
+    return novp
