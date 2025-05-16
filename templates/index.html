@@ -1,9 +1,16 @@
 <!DOCTYPE html>
-<html>
-<head><title>Метод Саати</title></head>
-<body>
-    <h1>Метод Саати</h1>
-    <p>Описание, описание, описание...</p>
-    <a href="{{ url_for('input_data') }}">Начать!</a>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <title>метод Саати</title>
+</head>
+<body style="font-family: Arial, sans-serif;">
+    <h1>метод Саати</h1>
+    <p>
+        Описание, описание, описание...
+    </p>
+    <form action="/input" method="get">
+        <button type="submit">Начать работу</button>
+    </form>
 </body>
 </html>

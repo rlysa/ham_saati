@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <title>Результаты</title>
+    <style>
+        table, th, td {
+            border: 1px solid black;
+            border-collapse: collapse;
+            padding: 5px;
+        }
+    </style>
+</head>
+<body>
+    <h2>Результаты анализа</h2>
+
+    <h3>Матрица сравнения критериев</h3>
+    <table>
+        {% for row in criteria_matrix %}
+        <tr>
+            {% for val in row %}
+            <td>{{ "%.2f"|format(val) }}</td>
+            {% endfor %}
+        </tr>
+        {% endfor %}
+    </table>
+
+    <h3>Вектор приоритетов критериев</h3>
+    <ul>
+        {% for name, val in zip(criteria_names, criteria_weights) %}
+        <li>{{ name }}: {{ "%.4f"|format(val) }}</li>
+        {% endfor %}
+    </ul>
+
+    <h3>Итоговые оценки объектов</h3>
+    <ul>
+        {% for name, score in zip(alt_names, final_scores) %}
+        <li>{{ name }} — {{ "%.4f"|format(score) }}</li>
+        {% endfor %}
+    </ul>
+
+    <h3>Ранжирование объектов</h3>
+    <ol>
+        {% for name in sorted_alternatives %}
+        <li>{{ name }}</li>
+        {% endfor %}
+    </ol>
+</body>
+</html>
