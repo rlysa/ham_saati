@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <title>Сравнение объектов</title>
+  <style>
+    table, th, td { border: 1px solid #333; border-collapse: collapse; padding: 5px; }
+    input { width: 60px; }
+  </style>
+</head>
+<body>
+  <h2>Попарное сравнение объектов по каждому критерию</h2>
+  <form method="post">
+    {% for crit in criteria_names %}
+      {# loop.index0 даст номер критерия k #}
+      {% set k = loop.index0 %}
+      <h3>Критерий: {{ crit }}</h3>
+      <table>
+        <tr>
+          <th></th>
+          {% for name in alt_names %}
+            <th>{{ name }}</th>
+          {% endfor %}
+        </tr>
+        {% for i in range(alt_names|length) %}
+        <tr>
+          <th>{{ alt_names[i] }}</th>
+          {% for j in range(alt_names|length) %}
+            <td>
+              {% if i == j %}
+                1
+              {% elif j > i %}
+                <input
+                  name="obj_{{ k }}_{{ i }}_{{ j }}"
+                  type="number" step="any" required>
+              {% else %}
+                &mdash;
+              {% endif %}
+            </td>
+          {% endfor %}
+        </tr>
+        {% endfor %}
+      </table>
+      <br>
+    {% endfor %}
+    <button type="submit">Рассчитать результаты</button>
+  </form>
+</body>
+</html>

@@ -23,36 +23,22 @@ def input_data():
 
 @app.route('/compare_criteria', methods=['GET', 'POST'])
 def compare_criteria():
-    c = session.get('criteria_count')
-    a = session.get('alt_count')
-    if not c or not a:
-        return redirect(url_for('input_data'))
+    crit_names = session.get('criteria_names')
+    c = len(crit_names)
 
-    if request.method == 'POST':
-        form = request.form
-
-        if 'criteria_names' in form:
-            session['criteria_names'] = form.getlist('criteria_names')
-            session['alt_names']      = form.getlist('alt_names')
-            return redirect(url_for('compare_criteria'))
-
-        crit_names = session.get('criteria_names')
+    if request.method == 'POST' and 'comp_0_1' in request.form:
         matrix = [[1.0]*c for _ in range(c)]
         for i in range(c):
             for j in range(i+1, c):
-                val = float(form[f'comp_{i}_{j}'])
+                val = float(request.form[f'comp_{i}_{j}'])
                 matrix[i][j] = val
-                matrix[j][i] = 1.0/val
-
+                matrix[j][i] = 1/val
         session['criteria_matrix'] = matrix
         return redirect(url_for('compare_objects'))
 
-    crit_names = session.get('criteria_names')
-    if not crit_names:
-        return redirect(url_for('input_data'))
+    return render_template('compare_criteria.html', criteria_names=crit_names)
 
-    return render_template('compare_criteria.html',
-                           criteria_names=crit_names)
+
 
 
 @app.route('/compare_objects', methods=['GET', 'POST'])
@@ -70,15 +56,15 @@ def compare_objects():
                 for j in range(i+1, a):
                     val = float(request.form[f'obj_{k}_{i}_{j}'])
                     mat[i][j] = val
-                    mat[j][i] = 1.0/val
+                    mat[j][i] = 1/val
             all_mats.append(mat)
-
         session['objects_matrices'] = all_mats
         return redirect(url_for('results'))
 
     return render_template('compare_objects.html',
                            criteria_names=crit_names,
                            alt_names=alt_names)
+
 
 
 @app.route('/results')
