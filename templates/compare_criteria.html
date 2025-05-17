@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <title>Сравнение критериев</title>
+  <style>
+    table, th, td { border: 1px solid #333; border-collapse: collapse; padding: 5px; }
+    input { width: 60px; }
+  </style>
+</head>
+<body>
+  <h2>Попарное сравнение критериев</h2>
+  <form method="post">
+    <table>
+      <tr>
+        <th></th>
+        {% for name in criteria_names %}
+          <th>{{ name }}</th>
+        {% endfor %}
+      </tr>
+      {% for i in range(criteria_names|length) %}
+      <tr>
+        <th>{{ criteria_names[i] }}</th>
+        {% for j in range(criteria_names|length) %}
+          <td>
+            {% if i == j %}
+              1
+            {% elif j > i %}
+              <input name="comp_{{i}}_{{j}}" type="number" step="any" required>
+            {% else %}
+              &mdash;
+            {% endif %}
+          </td>
+        {% endfor %}
+      </tr>
+      {% endfor %}
+    </table>
+    <br>
+    <button type="submit">Далее — сравнить объекты</button>
+  </form>
+</body>
+</html>

@@ -1,68 +1,82 @@
 <!DOCTYPE html>
 <html lang="ru">
 <head>
-    <meta charset="UTF-8">
-    <title>Ввод данных</title>
-    <script>
-        function generateInputs() {
-            const numCriteria = parseInt(document.getElementById("criteria_count").value);
-            const numAlternatives = parseInt(document.getElementById("alt_count").value);
+  <meta charset="UTF-8">
+  <title>Шаг 1: Ввод данных</title>
+  <style>
+    body { font-family: Arial, sans-serif; padding: 20px; }
+    input { margin-bottom: 10px; display: block; }
+    button { margin-top: 10px; }
+  </style>
+  <script>
+    function generateInputs() {
+      const numCriteria = parseInt(document.getElementById("criteria_count").value);
+      const numAlternatives = parseInt(document.getElementById("alt_count").value);
 
-            if (numCriteria > 1 && numAlternatives > 1) {
-                document.getElementById("step1").style.display = "none";
-                document.getElementById("step2").style.display = "block";
+      if (numCriteria > 1 && numAlternatives > 1) {
+        document.getElementById("step1").style.display = "none";
+        document.getElementById("step2").style.display = "block";
 
-                const criteriaContainer = document.getElementById("criteria_names");
-                const altContainer = document.getElementById("alt_names");
-
-                for (let i = 0; i < numCriteria; i++) {
-                    const input = document.createElement("input");
-                    input.type = "text";
-                    input.name = "criteria_names";
-                    input.placeholder = `Критерий ${i + 1}`;
-                    input.required = true;
-                    criteriaContainer.appendChild(input);
-                    criteriaContainer.appendChild(document.createElement("br"));
-                }
-
-                for (let j = 0; j < numAlternatives; j++) {
-                    const input = document.createElement("input");
-                    input.type = "text";
-                    input.name = "alt_names";
-                    input.placeholder = `Объект ${j + 1}`;
-                    input.required = true;
-                    altContainer.appendChild(input);
-                    altContainer.appendChild(document.createElement("br"));
-                }
-            } else {
-                alert("Введите корректные числа (больше 1)");
-            }
+        const criteriaContainer = document.getElementById("criteria_names");
+        criteriaContainer.innerHTML = "<h3>Названия критериев</h3>";
+        for (let i = 0; i < numCriteria; i++) {
+          const inp = document.createElement("input");
+          inp.type = "text";
+          inp.name = "criteria_names";
+          inp.placeholder = `Критерий ${i + 1}`;
+          inp.required = true;
+          criteriaContainer.appendChild(inp);
         }
-    </script>
+
+        const altContainer = document.getElementById("alt_names");
+        altContainer.innerHTML = "<h3>Названия объектов</h3>";
+        for (let j = 0; j < numAlternatives; j++) {
+          const inp = document.createElement("input");
+          inp.type = "text";
+          inp.name = "alt_names";
+          inp.placeholder = `Объект ${j + 1}`;
+          inp.required = true;
+          altContainer.appendChild(inp);
+        }
+      } else {
+        alert("Введите числа больше 1");
+      }
+    }
+  </script>
 </head>
 <body>
-    <h2>Ввод данных</h2>
+  <h2>Шаг 1. Задайте количество</h2>
+
+  <form id="inputForm"
+        action="{{ url_for('compare_criteria') }}"
+        method="post">
 
     <div id="step1">
-        <label>Количество критериев:</label>
-        <input type="number" id="criteria_count" min="2" required><br>
+      <label for="criteria_count">Количество критериев:</label>
+      <input type="number"
+             id="criteria_count"
+             name="criteria_count"
+             min="2"
+             required>
 
-        <label>Количество объектов:</label>
-        <input type="number" id="alt_count" min="2" required><br><br>
+      <label for="alt_count">Количество объектов:</label>
+      <input type="number"
+             id="alt_count"
+             name="alt_count"
+             min="2"
+             required>
 
-        <button onclick="generateInputs()">Продолжить</button>
+      <button type="button" onclick="generateInputs()">
+        Продолжить
+      </button>
     </div>
 
-    <form action="/process" method="post">
-        <div id="step2" style="display: none;">
-            <h3>Названия критериев</h3>
-            <div id="criteria_names"></div>
+    <div id="step2" style="display: none;">
+      <div id="criteria_names"></div>
+      <div id="alt_names"></div>
+      <button type="submit">Перейти к сравнению</button>
+    </div>
 
-            <h3>Названия объектов</h3>
-            <div id="alt_names"></div>
-
-            <br><button type="submit">Перейти к сравнению</button>
-        </div>
-    </form>
+  </form>
 </body>
 </html>
