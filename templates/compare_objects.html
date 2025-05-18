@@ -2,48 +2,127 @@
 <html lang="ru">
 <head>
   <meta charset="UTF-8">
-  <title>Сравнение объектов</title>
+  <title>Шаг 3: Сравнение объектов</title>
   <style>
-    table, th, td { border: 1px solid #333; border-collapse: collapse; padding: 5px; }
-    input { width: 60px; }
+    body {
+      font-family: Arial, sans-serif;
+      padding: 20px;
+      display: flex;
+      justify-content: center;
+    }
+    .container {
+      display: flex;
+      gap: 20px;
+      max-width: 900px;
+      width: 100%;
+    }
+    .main {
+      flex: 3;
+    }
+    .form-box {
+      background: #fafafa;
+      border: 1px solid #ccc;
+      border-radius: 10px;
+      padding: 20px;
+    }
+    .sidebar {
+      width: 250px;
+      background: #f9f9f9;
+      border: 1px solid #ccc;
+      border-radius: 10px;
+      padding: 15px;
+      box-sizing: border-box;
+    }
+    .sidebar h3 { margin-top: 0; }
+    h2 {
+      text-align: center;
+      margin-top: 0;
+    }
+    h3.crit-title {
+      margin-bottom: 5px;
+    }
+    table {
+      margin: 0 auto;
+      border-collapse: collapse;
+      margin-bottom: 15px;
+    }
+    th, td {
+      border: 1px solid #333;
+      padding: 8px;
+      text-align: center;
+    }
+    input {
+      width: 60px;
+      padding: 4px;
+      box-sizing: border-box;
+    }
+    button {
+      display: block;
+      margin: 20px auto;
+      padding: 8px 16px;
+    }
   </style>
 </head>
 <body>
-  <h2>Попарное сравнение объектов по каждому критерию</h2>
-  <form method="post">
-    {% for crit in criteria_names %}
-      {# loop.index0 даст номер критерия k #}
-      {% set k = loop.index0 %}
-      <h3>Критерий: {{ crit }}</h3>
-      <table>
-        <tr>
-          <th></th>
-          {% for name in alt_names %}
-            <th>{{ name }}</th>
+  <div class="container">
+    <div class="main">
+      <div class="form-box">
+        <h2>Шаг 3. Сравнение объектов</h2>
+        <form method="post">
+          {% for crit in criteria_names %}
+            {% set k = loop.index0 %}
+            <h3 class="crit-title">Критерий: {{ crit }}</h3>
+            <table>
+              <tr>
+                <th></th>
+                {% for name in alt_names %}
+                  <th>{{ name }}</th>
+                {% endfor %}
+              </tr>
+              {% for i in range(alt_names|length) %}
+              <tr>
+                <th>{{ alt_names[i] }}</th>
+                {% for j in range(alt_names|length) %}
+                  <td>
+                    {% if i == j %}
+                      1
+                    {% elif j > i %}
+                      <input
+                        name="obj_{{ k }}_{{ i }}_{{ j }}"
+                        type="number" step="any" required>
+                    {% else %}
+                      &mdash;
+                    {% endif %}
+                  </td>
+                {% endfor %}
+              </tr>
+              {% endfor %}
+            </table>
           {% endfor %}
-        </tr>
-        {% for i in range(alt_names|length) %}
-        <tr>
-          <th>{{ alt_names[i] }}</th>
-          {% for j in range(alt_names|length) %}
-            <td>
-              {% if i == j %}
-                1
-              {% elif j > i %}
-                <input
-                  name="obj_{{ k }}_{{ i }}_{{ j }}"
-                  type="number" step="any" required>
-              {% else %}
-                &mdash;
-              {% endif %}
-            </td>
-          {% endfor %}
-        </tr>
-        {% endfor %}
-      </table>
-      <br>
-    {% endfor %}
-    <button type="submit">Рассчитать результаты</button>
-  </form>
+          <button type="submit">Рассчитать результаты</button>
+        </form>
+      </div>
+    </div>
+
+    <aside class="sidebar">
+      <h3>Инструкция сравнения</h3>
+      <p>
+        Для каждого критерия вводится сравнение всех пар объектов.<br>
+        Введите в ячейке (строка vs столбец):
+      </p>
+      <ul>
+        <li><strong>>1</strong> — объект в строке предпочтительнее;</li>
+        <li><strong>1</strong>  — равнозначны;</li>
+        <li><strong><1</strong> — объект в столбце предпочтительнее.</li>
+      </ul>
+      <p>
+        Сравнение объектов и критериев аналогичны по своей технологии.
+        При необходимости сравнить яблоко и апельсин, в данном случае, следует руководствоваться
+        критериями, заявленными ранее. Если, теоретически, отдать предпочтение апельсину (строка), нежели
+        яблоку (столбец), тогда следует вписать, например, число 2 (если считать, что апельсин в 2 раза превосходит яблоко по определенному критерию)
+        в ячейку, объединяющую данную строку и данный столбец.
+      </p>
+    </aside>
+  </div>
 </body>
 </html>

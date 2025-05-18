@@ -1,49 +1,116 @@
 <!DOCTYPE html>
 <html lang="ru">
 <head>
-    <meta charset="UTF-8">
-    <title>Результаты</title>
-    <style>
-        table, th, td {
-            border: 1px solid black;
-            border-collapse: collapse;
-            padding: 5px;
-        }
-    </style>
+  <meta charset="UTF-8">
+  <title>Результаты</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      padding: 20px;
+      display: flex;
+      justify-content: center;
+    }
+    .container {
+      display: flex;
+      gap: 20px;
+      max-width: 900px;
+      width: 100%;
+    }
+    .main {
+      flex: 3;
+    }
+    .form-box {
+      background: #fafafa;
+      border: 1px solid #ccc;
+      border-radius: 10px;
+      padding: 20px;
+    }
+    .sidebar {
+      width: 250px;
+      background: #f9f9f9;
+      border: 1px solid #ccc;
+      border-radius: 10px;
+      padding: 15px;
+      box-sizing: border-box;
+    }
+    .sidebar h3 { margin-top: 0; }
+    h2 {
+      text-align: center;
+      margin-top: 0;
+    }
+    h3 {
+        margin: 10px;
+    }
+    table {
+      margin: 10px auto;
+      border-collapse: collapse;
+      width: auto;
+    }
+    th, td {
+      border: 1px solid #333;
+      padding: 8px;
+      text-align: center;
+    }
+    ul, ol {
+        margin: 0;
+        padding-left: 20px; 
+        list-style-position: inside;
+    }
+
+  </style>
 </head>
 <body>
-    <h2>Результаты анализа</h2>
+  <div class="container">
+    <div class="main">
+      <div class="form-box">
+        <h2>Результаты анализа</h2>
 
-    <h3>Матрица сравнения критериев</h3>
-    <table>
-        {% for row in criteria_matrix %}
-        <tr>
+        <h3>Матрица сравнения критериев</h3>
+        <table>
+          {% for row in criteria_matrix %}
+          <tr>
             {% for val in row %}
             <td>{{ "%.2f"|format(val) }}</td>
             {% endfor %}
-        </tr>
-        {% endfor %}
-    </table>
+          </tr>
+          {% endfor %}
+        </table>
 
-    <h3>Вектор приоритетов критериев</h3>
-    <ul>
-        {% for name, val in zip(criteria_names, criteria_weights) %}
-        <li>{{ name }}: {{ "%.4f"|format(val) }}</li>
-        {% endfor %}
-    </ul>
+        <h3>Вектор приоритетов критериев</h3>
+        <ul>
+          {% for name, val in zip(criteria_names, criteria_weights) %}
+          <li>{{ name }}: {{ "%.4f"|format(val) }}</li>
+          {% endfor %}
+        </ul>
 
-    <h3>Итоговые оценки объектов</h3>
-    <ul>
-        {% for name, score in zip(alt_names, final_scores) %}
-        <li>{{ name }} — {{ "%.4f"|format(score) }}</li>
-        {% endfor %}
-    </ul>
+        <h3>Итоговые оценки объектов</h3>
+        <ul>
+          {% for name, score in zip(alt_names, final_scores) %}
+          <li>{{ name }} — {{ "%.4f"|format(score) }}</li>
+          {% endfor %}
+        </ul>
 
-    <h3>Ранжирование объектов</h3>
-    <ol>
-        {% for name in sorted_alternatives %}
-        <li>{{ name }}</li>
-        {% endfor %}
-    </ol>
+        <h3>Ранжирование объектов</h3>
+        <ol>
+          {% for name in sorted_alternatives %}
+          <li>{{ name }}</li>
+          {% endfor %}
+        </ol>
+      </div>
+    </div>
+
+    <aside class="sidebar">
+      <h3 style="margin: 0;">Интерпретация результатов</h3>
+      <p style="margin-bottom: 5px;">
+        Тут можно видеть:
+      </p>
+      <ul class="desc_list">
+        <li><strong>Матрицу</strong> попарных сравнений критериев. Она показывает, насколько отдельно взятый критерий важнее другого.</li>
+        <li><strong>Вектор весов</strong> критериев. Это - нормированный список чисел, отражающих относительную значимость каждого критерия.</li>
+        <li><strong>Оценки</strong> объектов между собой по итоговой сумме.</li>
+        <li><strong>Ранжирование</strong> объектов от лучшего к худшему.</li>
+      </ul>
+    </aside>
+  </div>
 </body>
 </html>

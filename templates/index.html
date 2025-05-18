@@ -1,16 +1,50 @@
 <!DOCTYPE html>
 <html lang="ru">
 <head>
-    <meta charset="UTF-8">
-    <title>метод Саати</title>
+  <meta charset="UTF-8">
+  <title>Метод Саати</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      padding: 20px;
+      display: flex;
+      justify-content: center;
+    }
+    .desc-box {
+      border: 1px solid #ccc;
+      border-radius: 10px;
+      padding: 20px;
+      max-width: 600px;
+      background: #fafafa;
+    }
+    h1 {
+      margin-top: 0;
+      text-align: center;
+    }
+    p {
+      line-height: 1.5;
+    }
+    .start-btn {
+      display: block;
+      margin: 20px auto 0 auto;
+      padding: 8px 16px;
+    }
+  </style>
 </head>
-<body style="font-family: Arial, sans-serif;">
-    <h1>метод Саати</h1>
-    <p>
-        Описание, описание, описание...
+<body>
+  <div class="desc-box">
+    <h1>Метод Саати</h1>
+    <p style="text-align: center;">
+      Метод анализа иерархий, придуманный Томасом Л. Саати, — структурированный метод принятия решений,
+      основанный на попарных сравнениях. Сравниваются и критерии, по которым проводится оценка,
+      на предмет значимости между друг другом, и объекты по данным критерям между собой. 
+      Данный метод используется для определения приоритетов в сложных задачах с неочевидным выбором. 
+      Можно сказать, что этот метод - универсальный алгоритм принятия решений.
     </p>
-    <form action="/input" method="get">
-        <button type="submit">Начать работу</button>
+
+    <form action="{{ url_for('input_data') }}" method="get">
+      <button class="start-btn" type="submit">Начать работу</button>
     </form>
+  </div>
 </body>
 </html>

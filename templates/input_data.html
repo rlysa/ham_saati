@@ -4,9 +4,55 @@
   <meta charset="UTF-8">
   <title>Шаг 1: Ввод данных</title>
   <style>
-    body { font-family: Arial, sans-serif; padding: 20px; }
-    input { margin-bottom: 10px; display: block; }
-    button { margin-top: 10px; }
+    body {
+      font-family: Arial, sans-serif;
+      padding: 20px;
+      display: flex;
+      justify-content: center;
+    }
+    .container {
+      display: flex;
+      gap: 20px;
+      max-width: 900px;
+      width: 100%;
+    }
+    .main {
+      flex: 3;
+    }
+    .form-box {
+      background: #fafafa;
+      border: 1px solid #ccc;
+      border-radius: 10px;
+      padding: 20px;
+    }
+    .sidebar {
+      flex: 1;
+      height: fit-content;
+      background: #f9f9f9;
+      border: 1px solid #ccc;
+      border-radius: 10px;
+      padding: 15px;
+      box-sizing: border-box;
+    }
+    .sidebar h3 {
+      margin-top: 0;
+    }
+    h2 {
+      text-align: center;
+      margin-top: 0;
+    }
+    input {
+      margin-bottom: 10px;
+      display: block;
+      width: 100%;
+      box-sizing: border-box;
+      padding: 8px;
+    }
+    button {
+      padding: 8px 16px;
+      display: block;
+      margin: 10px auto;
+    }
   </style>
   <script>
     function generateInputs() {
@@ -17,26 +63,28 @@
         document.getElementById("step1").style.display = "none";
         document.getElementById("step2").style.display = "block";
 
-        const criteriaContainer = document.getElementById("criteria_names");
-        criteriaContainer.innerHTML = "<h3>Названия критериев</h3>";
+        document.getElementById("sidebar-step1").style.display = "none";
+        document.getElementById("sidebar-step2").style.display = "block";
+
+        const critCont = document.getElementById("criteria_names");
+        critCont.innerHTML = "<h3>Названия критериев</h3>";
         for (let i = 0; i < numCriteria; i++) {
           const inp = document.createElement("input");
           inp.type = "text";
           inp.name = "criteria_names";
           inp.placeholder = `Критерий ${i + 1}`;
           inp.required = true;
-          criteriaContainer.appendChild(inp);
+          critCont.appendChild(inp);
         }
-
-        const altContainer = document.getElementById("alt_names");
-        altContainer.innerHTML = "<h3>Названия объектов</h3>";
+        const altCont = document.getElementById("alt_names");
+        altCont.innerHTML = "<h3>Названия объектов</h3>";
         for (let j = 0; j < numAlternatives; j++) {
           const inp = document.createElement("input");
           inp.type = "text";
           inp.name = "alt_names";
           inp.placeholder = `Объект ${j + 1}`;
           inp.required = true;
-          altContainer.appendChild(inp);
+          altCont.appendChild(inp);
         }
       } else {
         alert("Введите числа больше 1");
@@ -45,38 +93,49 @@
   </script>
 </head>
 <body>
-  <h2>Шаг 1. Задайте количество</h2>
+  <div class="container">
+    <div class="main">
+      <div class="form-box">
+        <h2>Шаг 1. Задайте количество</h2>
+        <form id="inputForm"
+              action="{{ url_for('compare_criteria') }}"
+              method="post">
+          <div id="step1">
+            <label for="criteria_count">Количество критериев:</label>
+            <input type="number" id="criteria_count" name="criteria_count" min="2" required>
 
-  <form id="inputForm"
-        action="{{ url_for('compare_criteria') }}"
-        method="post">
+            <label for="alt_count">Количество объектов:</label>
+            <input type="number" id="alt_count" name="alt_count" min="2" required>
 
-    <div id="step1">
-      <label for="criteria_count">Количество критериев:</label>
-      <input type="number"
-             id="criteria_count"
-             name="criteria_count"
-             min="2"
-             required>
-
-      <label for="alt_count">Количество объектов:</label>
-      <input type="number"
-             id="alt_count"
-             name="alt_count"
-             min="2"
-             required>
-
-      <button type="button" onclick="generateInputs()">
-        Продолжить
-      </button>
+            <button type="button" onclick="generateInputs()">Продолжить</button>
+          </div>
+          <div id="step2" style="display: none;">
+            <div id="criteria_names"></div>
+            <div id="alt_names"></div>
+            <button type="submit">Перейти к сравнению</button>
+          </div>
+        </form>
+      </div>
     </div>
 
-    <div id="step2" style="display: none;">
-      <div id="criteria_names"></div>
-      <div id="alt_names"></div>
-      <button type="submit">Перейти к сравнению</button>
-    </div>
-
-  </form>
+    <aside class="sidebar">
+      <div id="sidebar-step1">
+        <h3>Как задать количество</h3>
+        <p>
+          Введите общее число <strong>критериев</strong>, по которым будете сравнивать объекты,
+          и число самих <strong>объектов</strong>.<br>
+          Оба значения должны быть <strong>больше 1</strong>. Например, если сравнивать яблоки и апельсины по критериям вкуса, аромата и зрелости,
+          то следует выбрать число объектов, равное 2, и число критериев, равное 3.
+        </p>
+      </div>
+      <div id="sidebar-step2" style="display: none;">
+        <h3>Как задать названия</h3>
+        <p>
+          Укажите уникальные названия для каждого <strong>критерия</strong> и каждого <strong>объекта</strong>.<br>
+          Названия не должны повторяться и не могут быть пустыми. Возвращаясь к аналогии с яблоками и апельсинами, следует написать в качестве критериев вкус, аромат и зрелость, а в качестве объектов - яблоко и апельсин.
+        </p>
+      </div>
+    </aside>
+  </div>
 </body>
 </html>

@@ -2,6 +2,8 @@ from flask import Flask, render_template, request, redirect, url_for, session
 from saati_algorithm import run_saati
 
 app = Flask(__name__)
+app.jinja_env.globals.update(zip=zip)
+
 app.secret_key = 'your_secret_key'
 
 
@@ -21,24 +23,33 @@ def input_data():
     return render_template('input_data.html')
 
 
-@app.route('/compare_criteria', methods=['GET', 'POST'])
+@app.route('/compare_criteria', methods=['GET','POST'])
 def compare_criteria():
-    crit_names = session.get('criteria_names')
-    c = len(crit_names)
+    form = request.form
+    if request.method == 'POST' and 'criteria_count' in form:
+        session['criteria_count']  = int(form['criteria_count'])
+        session['alt_count']       = int(form['alt_count'])
+        session['criteria_names']  = form.getlist('criteria_names')
+        session['alt_names']       = form.getlist('alt_names')
+        return redirect(url_for('compare_criteria'))
 
-    if request.method == 'POST' and 'comp_0_1' in request.form:
+    crit_names = session.get('criteria_names')
+    c = session.get('criteria_count')
+    if not crit_names or not c:
+        return redirect(url_for('input_data'))
+
+    if request.method == 'POST' and 'criteria_count' not in form:
         matrix = [[1.0]*c for _ in range(c)]
         for i in range(c):
             for j in range(i+1, c):
-                val = float(request.form[f'comp_{i}_{j}'])
+                val = float(form[f'comp_{i}_{j}'])
                 matrix[i][j] = val
-                matrix[j][i] = 1/val
+                matrix[j][i] = 1.0/val
         session['criteria_matrix'] = matrix
         return redirect(url_for('compare_objects'))
 
-    return render_template('compare_criteria.html', criteria_names=crit_names)
-
-
+    return render_template('compare_criteria.html',
+                           criteria_names=crit_names)
 
 
 @app.route('/compare_objects', methods=['GET', 'POST'])
